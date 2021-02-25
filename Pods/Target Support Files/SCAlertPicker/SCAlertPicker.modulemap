@@ -1,0 +1,6 @@
+framework module SCAlertPicker {
+  umbrella header "SCAlertPicker-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,20 @@
+PODS:
+  - IQKeyboardManager (6.5.6)
+  - SCAlertPicker (0.9.0)
+
+DEPENDENCIES:
+  - IQKeyboardManager
+  - SCAlertPicker
+
+SPEC REPOS:
+  trunk:
+    - IQKeyboardManager
+    - SCAlertPicker
+
+SPEC CHECKSUMS:
+  IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
+  SCAlertPicker: 8a819fa9f0744482468302869ea2eff4d4d4f4c7
+
+PODFILE CHECKSUM: 9af6c70c540641a575cedcb28dbb74ba13184b0c
+
+COCOAPODS: 1.10.1
