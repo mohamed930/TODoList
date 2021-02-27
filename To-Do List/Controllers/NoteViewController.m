@@ -7,10 +7,11 @@
 
 #import "NoteViewController.h"
 #import <SCAlertPicker.h>
+#import <UIAlertDateTimePicker.h>
 
 @interface NoteViewController ()
 
-
+@property NSString *PickState;
 
 @end
 
@@ -19,19 +20,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self makecornerCriclewithoutborder:_PriorityView];
+    
     _tab = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ShowPriority:)];
     _tab.numberOfTapsRequired = 1;
     _tab.numberOfTapsRequired = 1;
     [_PriorityLabel setUserInteractionEnabled:YES];
     [_PriorityLabel addGestureRecognizer: _tab];
     
-    _tab = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ShowDeadLine:)];
-    _tab.numberOfTapsRequired = 1;
-    _tab.numberOfTapsRequired = 1;
-    [_DeadLineLabel setUserInteractionEnabled:YES];
-    [_DeadLineLabel addGestureRecognizer: _tab];
+    _datePicker = [[UIDatePicker alloc] init];
+    _datePicker.frame = CGRectMake(0, 0, self.view.frame.size.width, 300);
     
-    [self makecornerCriclewithoutborder:_PriorityView];
+    _arr = [NSMutableArray new];
+    [_arr addObject:@"To-Do"];
+    [_arr addObject:@"In progress"];
+    [_arr addObject:@"Completed"];
 }
 
 
@@ -49,16 +52,40 @@
     [self.normalAlertPicker show];
 }
 
--(void) ShowDeadLine: (UITapGestureRecognizer *)recognizer {
-    self.dateAlertPicker = [[SCAlertPicker alloc] initWithButtonTitle:@"OK" datePickerMode:UIDatePickerModeDateAndTime delegate:self];
-    [self.dateAlertPicker show];
+-(void) ShowDeadLine {
+    printf("Date is Show\n");
+    
+    UIToolbar *toolbar = [UIToolbar new];
+    [toolbar sizeToFit];
+
+
+    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:@selector(DonePressed)];
+    
+    NSMutableArray<UIBarButtonItem *> *btns = [NSMutableArray new];
+    [btns addObject:btn];
+    
+    [toolbar setItems:btns animated:YES];
+    
+    _DeadLineLabel.inputAccessoryView = toolbar;
+    _DeadLineLabel.inputView = _datePicker;
+    
 }
 
+-(void) DonePressed {
+    
+    NSDateFormatter *dateFromStringFormatter = [NSDateFormatter new];
+    dateFromStringFormatter.dateFormat = @"dd/MM/yyy hh:mm a";
+    NSString *dateFromString = [dateFromStringFormatter stringFromDate:_datePicker.date];
+    
+    _DeadLineLabel.text = dateFromString;
+    
+    [self.view endEditing:YES];
+}
 
 -(void) makecornerCriclewithoutborder:(UIView*) View {
     View.layer.cornerRadius = View.frame.size.width / 2;
     View.clipsToBounds = YES;
-    View.layer.backgroundColor = UIColor.clearColor.CGColor;
+    View.layer.backgroundColor = UIColor.grayColor.CGColor;
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -91,10 +118,29 @@
     }
 }
 
-- (void)SCAlertPicker:(SCAlertPicker *)SCAlertPicker ClickWithDate:(NSDate *)date {
-    if (SCAlertPicker == self.dateAlertPicker) {
-        NSLog(@"SCAlertPicker::%@", date);
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField == _DeadLineLabel) {
+        [self ShowDeadLine];
     }
 }
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return _arr.count;
+}
+
+- (NSInteger)numberOfComponentsInPickerView:(nonnull UIPickerView *)pickerView {
+    return 1;
+}
+
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return [_arr objectAtIndex:row];
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    _PickState = [_arr objectAtIndex:row];
+    printf("%s\n",[_PickState UTF8String]);
+}
+
 
 @end
