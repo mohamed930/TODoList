@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ToDoList : NSObject
 
-@property NSString *name, *desc , *priority , *DeadLineData , *DateCreation , *state;
+@property NSString  *ID ,*name, *desc , *priority , *DeadLineData , *DateCreation , *state;
 
 @end
 

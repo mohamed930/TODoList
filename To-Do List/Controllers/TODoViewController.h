@@ -7,8 +7,9 @@
 
 #import <UIKit/UIKit.h>
 #import "ToDoList.h"
+#import "ToDoProtocol.h"
 
-@interface TODoViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
+@interface TODoViewController : UIViewController <UITableViewDataSource,UITableViewDelegate ,ToDoProtocol>
 
 @property (weak, nonatomic) IBOutlet UISearchBar *SearchTextField;
 

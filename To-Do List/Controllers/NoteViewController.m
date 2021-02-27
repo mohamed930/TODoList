@@ -8,6 +8,7 @@
 #import "NoteViewController.h"
 #import <SCAlertPicker.h>
 #import <UIAlertDateTimePicker.h>
+#import "ToDoList.h"
 
 @interface NoteViewController ()
 
@@ -20,30 +21,144 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self makecornerCriclewithoutborder:_PriorityView];
-    
-    _tab = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ShowPriority:)];
-    _tab.numberOfTapsRequired = 1;
-    _tab.numberOfTapsRequired = 1;
-    [_PriorityLabel setUserInteractionEnabled:YES];
-    [_PriorityLabel addGestureRecognizer: _tab];
-    
-    _datePicker = [[UIDatePicker alloc] init];
-    _datePicker.frame = CGRectMake(0, 0, self.view.frame.size.width, 300);
-    
     _arr = [NSMutableArray new];
     [_arr addObject:@"To-Do"];
     [_arr addObject:@"In progress"];
     [_arr addObject:@"Completed"];
+    _datePicker = [[UIDatePicker alloc] init];
+    
+    if (_isEdit == NO) {
+        [_NoteTitle setEnabled:YES];
+        [_PriorityLabel setEnabled:YES];
+        [_DeadLineLabel setEnabled:YES];
+        [_NoteDetails setEditable:YES];
+        [_SaveButton setTitle:@"Save" forState:UIControlStateNormal];
+        [_PriorityLabel setUserInteractionEnabled:YES];
+        [_StatePickerView setUserInteractionEnabled:YES];
+        [self makecornerCriclewithoutborder:_PriorityView];
+    }
+    else {
+        [_NoteTitle setEnabled:NO];
+        _NoteTitle.text = _onece.name;
+        _PriorityLabel.text = _onece.priority;
+        [_DeadLineLabel setEnabled:NO];
+        _DeadLineLabel.text = _onece.DeadLineData;
+        [_NoteDetails setEditable:NO];
+        _NoteDetails.text = _onece.desc;
+        [_SaveButton setTitle:@"Edit" forState:UIControlStateNormal];
+        [_PriorityLabel setUserInteractionEnabled:NO];
+        [_StatePickerView setUserInteractionEnabled:NO];
+        
+        if ([_PriorityLabel.text isEqualToString:@"High"]) {
+            [self makecornerCriclewithoutborder:_PriorityView];
+            _PriorityView.backgroundColor = UIColor.redColor;
+        }
+        else if ([_PriorityLabel.text isEqualToString:@"Mid"]) {
+            [self makecornerCriclewithoutborder:_PriorityView];
+            _PriorityView.backgroundColor = UIColor.orangeColor;
+        }
+        else {
+            [self makecornerCriclewithoutborder:_PriorityView];
+            _PriorityView.backgroundColor = UIColor.greenColor;
+        }
+        
+        int index = 0;
+        while (index < _arr.count) {
+            NSString *row = [_arr objectAtIndex:index];
+            if ([row isEqualToString:_onece.state]) {
+                [_StatePickerView selectRow:index inComponent:0 animated:YES];
+                break;
+            }
+            index++;
+        }
+        
+    }
+    
+    _tab = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ShowPriority:)];
+    _tab.numberOfTapsRequired = 1;
+    _tab.numberOfTapsRequired = 1;
+    
+    [_PriorityLabel addGestureRecognizer: _tab];
+    
+    _datePicker.frame = CGRectMake(0, 0, self.view.frame.size.width, 300);
 }
 
 
 - (IBAction)BTNSave:(id)sender {
     
+    if (_isEdit == NO) {
+        [self SaveNote];
+    }
+    else {
+        [self UpdateNote];
+    }
+    
 }
 
 - (IBAction)BTNBack:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void) SaveNote {
+    
+    ToDoList *list = [ToDoList new];
+    NSUUID *id1 = [NSUUID new];
+    list.ID = [id1 UUIDString];
+    list.name = _NoteTitle.text;
+    list.priority = _PriorityLabel.text;
+    list.DeadLineData = _DeadLineLabel.text;
+    list.state = _PickState;
+    list.desc = _NoteDetails.text;
+  
+    NSDate *date = [NSDate new];
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"dd/MM/yyy hh:mm a";
+    formatter.AMSymbol = @"am";
+    formatter.PMSymbol = @"pm";
+    NSString *result = [formatter stringFromDate: date];
+    
+    list.DateCreation = result;
+    
+    
+    [_delegate SendNewNote: list:NO];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
+
+-(void) UpdateNote {
+    
+    if (_NoteTitle.isEnabled == NO) {
+        [_NoteTitle setEnabled:YES];
+        [_PriorityLabel setEnabled:YES];
+        [_DeadLineLabel setEnabled:YES];
+        [_NoteDetails setEditable:YES];
+        [_PriorityLabel setUserInteractionEnabled:YES];
+        [_StatePickerView setUserInteractionEnabled:YES];
+    }
+    else {
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confrimation" message:@"Are you sure to Edit?" preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Save" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            printf("Edited is done\n");
+            
+            ToDoList *list = [ToDoList new];
+            list.ID = self->_onece.ID;
+            list.name = self->_NoteTitle.text;
+            list.priority = self->_PriorityLabel.text;
+            list.DeadLineData = self->_DeadLineLabel.text;
+            list.state = self->_PickState;
+            list.desc = self->_NoteDetails.text;
+            
+            [self->_delegate SendNewNote:list :YES];
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    
 }
 
 -(void) ShowPriority: (UITapGestureRecognizer *)recognizer {
@@ -75,6 +190,8 @@
     
     NSDateFormatter *dateFromStringFormatter = [NSDateFormatter new];
     dateFromStringFormatter.dateFormat = @"dd/MM/yyy hh:mm a";
+    dateFromStringFormatter.AMSymbol = @"am";
+    dateFromStringFormatter.PMSymbol = @"pm";
     NSString *dateFromString = [dateFromStringFormatter stringFromDate:_datePicker.date];
     
     _DeadLineLabel.text = dateFromString;

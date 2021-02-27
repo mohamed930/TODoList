@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SCAlertPicker.h"
+#import "ToDoProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,12 +18,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIView *PriorityView;
 @property (weak, nonatomic) IBOutlet UILabel *PriorityLabel;
 @property (weak, nonatomic) IBOutlet UITextField *DeadLineLabel;
+@property (weak, nonatomic) IBOutlet UIButton *SaveButton;
+@property (weak, nonatomic) IBOutlet UIPickerView *StatePickerView;
+
 
 @property UITapGestureRecognizer *tab;
 @property (nonatomic, strong) SCAlertPicker *normalAlertPicker;
 
 @property UIDatePicker *datePicker;
 @property NSMutableArray *arr;
+@property id<ToDoProtocol> delegate;
+@property BOOL isEdit;
+@property ToDoList *onece;
 
 -(void) makecornerCriclewithoutborder:(UIView*) View;
 

@@ -28,22 +28,32 @@
 }
 
 -(void) ReadTODOList {
+    
     ToDoList *t = [ToDoList new];
+    NSUUID *id1 = [NSUUID new];
+    t.ID = [id1 UUIDString];
     t.name = @"Eat";
     t.DateCreation = @"2020-05-10";
-    t.priority = @"high";
+    t.priority = @"High";
+    t.state = @"In progress";
     [_todoArray addObject: t];
     
     t = [ToDoList new];
+    id1 = [NSUUID new];
+    t.ID = [id1 UUIDString];
     t.name = @"Spa";
     t.DateCreation = @"2020-05-10";
-    t.priority = @"med";
+    t.priority = @"Mid";
+    t.state = @"In progress";
     [_todoArray addObject: t];
     
     t = [ToDoList new];
+    id1 = [NSUUID new];
+    t.ID = [id1 UUIDString];
     t.name = @"Sleep";
     t.DateCreation = @"2020-05-10";
-    t.priority = @"low";
+    t.priority = @"Low";
+    t.state = @"Completed";
     [_todoArray addObject: t];
     [_tableView reloadData];
 }
@@ -54,12 +64,34 @@
     NoteViewController *next = [story instantiateViewControllerWithIdentifier:@"NotesDetails"];
     next.modalPresentationStyle = UIModalPresentationFullScreen;
     
+    next.delegate = self;
+    [next setIsEdit:NO];
+    
     [self presentViewController:next animated:YES completion:nil];
     
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
+}
+
+-(void) SendNewNote:(ToDoList *) t :(BOOL) EditTage {
+    
+    if (EditTage == NO) {
+        [_todoArray addObject: t];
+        [_tableView reloadData];
+    }
+    else {
+        for (int i=0;([_todoArray count] -1); i++) {
+            if (t.ID == [_todoArray objectAtIndex:i].ID) {
+                [_todoArray removeObjectAtIndex:i];
+                [_tableView reloadData];
+                break;
+            }
+        }
+        [_todoArray addObject: t];
+        [_tableView reloadData];
+    }
 }
 
 
@@ -69,10 +101,10 @@
     cell.CellTitle.text = [_todoArray objectAtIndex:indexPath.row].name;
     cell.CellDate.text  = [_todoArray objectAtIndex:indexPath.row].DateCreation;
     
-    if ([[_todoArray objectAtIndex:indexPath.row].priority isEqualToString:@"high"]) {
+    if ([[_todoArray objectAtIndex:indexPath.row].priority isEqualToString:@"High"]) {
         cell.CellPerioerty.backgroundColor = UIColor.redColor;
     }
-    else if ([[_todoArray objectAtIndex:indexPath.row].priority isEqualToString:@"med"]) {
+    else if ([[_todoArray objectAtIndex:indexPath.row].priority isEqualToString:@"Mid"]) {
         cell.CellPerioerty.backgroundColor = UIColor.orangeColor;
     }
     else {
@@ -91,6 +123,17 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UIStoryboard *story = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    NoteViewController *next = [story instantiateViewControllerWithIdentifier:@"NotesDetails"];
+    next.modalPresentationStyle = UIModalPresentationFullScreen;
+    
+    next.delegate = self;
+    [next setIsEdit:YES];
+    next.onece = [ToDoList new];
+    next.onece = [_todoArray objectAtIndex:indexPath.row];
+    
+    [self presentViewController:next animated:YES completion:nil];
     
 }
 

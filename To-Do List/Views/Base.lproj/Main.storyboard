@@ -229,6 +229,8 @@
                         <outlet property="NoteTitle" destination="4MA-1c-JIP" id="HeU-Du-Xua"/>
                         <outlet property="PriorityLabel" destination="7la-HB-t12" id="GrJ-6q-zVH"/>
                         <outlet property="PriorityView" destination="haq-st-aHc" id="YN0-TB-iy6"/>
+                        <outlet property="SaveButton" destination="ybe-st-DOe" id="g82-mk-IMe"/>
+                        <outlet property="StatePickerView" destination="HJn-nP-fiO" id="PZg-AO-vIU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="99f-Gm-7E5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
