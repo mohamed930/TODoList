@@ -68,6 +68,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="To-Do List" id="31c-EW-0aU">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="icons_0608-32-512-2" id="VmK-Vf-BoP">
+                            <connections>
+                                <action selector="BTNSort:" destination="wjt-GA-lha" id="fUk-hu-hoj"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="SGP-BU-GGr">
                             <connections>
                                 <action selector="BTNAdd:" destination="wjt-GA-lha" id="jv2-p4-n9s"/>
@@ -267,6 +272,7 @@
         <image name="Webp.net-resizeimage copy 2" width="50" height="50"/>
         <image name="icons8-in-progress-50" width="50" height="50"/>
         <image name="icons8-todo-list-100-2" width="50" height="50"/>
+        <image name="icons_0608-32-512-2" width="51" height="51"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -21,6 +21,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _isSorted = NO;
+    
     [_tableView registerNib:[UINib nibWithNibName:@"TODOList Cell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     
     _todoArray = [[NSMutableArray alloc] init];
@@ -84,6 +86,32 @@
     t.priority = @"Low";
     t.state = @"Completed";
     [_todoArray addObject: t];
+    //[_tableView reloadData];
+}
+
+- (IBAction)BTNSort:(id)sender {
+    
+    _isSorted = YES;
+    _HighTodo = [NSMutableArray new];
+    _MedTodo  = [NSMutableArray new];
+    _LowTodo  = [NSMutableArray new];
+    
+    _Sektion = [NSMutableArray new];
+    [_Sektion addObject:@"High"];
+    [_Sektion addObject:@"Mid"];
+    [_Sektion addObject:@"Low"];
+    
+    for (int i=0;i<(_todoArray.count);i++) {
+        if ([[_todoArray objectAtIndex:i].priority isEqualToString:@"High"]) {
+            [_HighTodo addObject: [_todoArray objectAtIndex:i]];
+        }
+        else if ([[_todoArray objectAtIndex:i].priority isEqualToString:@"Mid"]) {
+            [_MedTodo addObject: [_todoArray objectAtIndex:i]];
+        }
+        else if ([[_todoArray objectAtIndex:i].priority isEqualToString:@"Low"]) {
+            [_LowTodo addObject: [_todoArray objectAtIndex:i]];
+        }
+    }
     [_tableView reloadData];
 }
 
@@ -104,25 +132,84 @@
     [self.view endEditing:YES];
 }
 
+// MARK:- TODO:- Protocol Delegate.
+// -------------------------
 -(void) SendNewNote:(ToDoList *) t :(BOOL) EditTage {
     
     if (EditTage == NO) {
-        [_todoArray addObject: t];
-        [_tableView reloadData];
+        
+        if (_isSorted == YES) {
+            
+            if ([t.priority isEqualToString:@"High"]) {
+                [_HighTodo addObject: t];
+                [_tableView reloadData];
+            }
+            else if ([t.priority isEqualToString:@"Mid"]) {
+                [_MedTodo addObject: t];
+                [_tableView reloadData];
+            }
+            else {
+                [_LowTodo addObject: t];
+                [_tableView reloadData];
+            }
+            
+        }
+        else {
+            [_todoArray addObject: t];
+            [_tableView reloadData];
+        }
+        
     }
     else {
-        for (int i=0;([_todoArray count] -1); i++) {
-            if (t.ID == [_todoArray objectAtIndex:i].ID) {
-                [_todoArray removeObjectAtIndex:i];
-                [_tableView reloadData];
-                break;
+        
+        if (_isSorted == YES) {
+            
+            if ([t.priority isEqualToString:@"High"]) {
+                [self UpdateInTable:_HighTodo :t];
             }
+            else if ([t.priority isEqualToString:@"Mid"]) {
+                [self UpdateInTable:_MedTodo :t];
+            }
+            else {
+                [self UpdateInTable:_LowTodo :t];
+            }
+            
         }
-        [_todoArray addObject: t];
-        [_tableView reloadData];
+        else {
+            [self UpdateInTable:_todoArray :t];
+        }
     }
 }
 
+-(void) UpdateInTable:(NSMutableArray<ToDoList *> *) arr : (ToDoList *) t {
+    
+    for (int i=0;i<([arr count]); i++) {
+        if (t.ID == [arr objectAtIndex:i].ID) {
+            [arr removeObjectAtIndex:i];
+            [_tableView reloadData];
+            break;
+        }
+    }
+    [arr addObject: t];
+    [_tableView reloadData];
+}
+
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (_isSorted == YES) {
+        return 3;
+    }
+    else {
+        return 1;
+    }
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (_isSorted == YES) {
+        return [_Sektion objectAtIndex:section];
+    }
+    return NULL;
+}
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     TODOList_Cell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
@@ -133,35 +220,75 @@
         list = [_FilterTodo objectAtIndex:indexPath.row];
     }
     else {
-        list = [_todoArray objectAtIndex:indexPath.row];
+        
+        if (_isSorted == YES) {
+            
+            if (indexPath.section == 0) {
+                list = [_HighTodo objectAtIndex:indexPath.row];
+                cell.CellPerioerty.backgroundColor = UIColor.redColor;
+            }
+            else if (indexPath.section == 1) {
+                list = [_MedTodo objectAtIndex:indexPath.row];
+                cell.CellPerioerty.backgroundColor = UIColor.orangeColor;
+            }
+            else {
+                list = [_LowTodo objectAtIndex:indexPath.row];
+                cell.CellPerioerty.backgroundColor = UIColor.greenColor;
+            }
+            
+        }
+        else {
+            list = [_todoArray objectAtIndex:indexPath.row];
+            
+            if ([list.priority isEqualToString:@"High"]) {
+                cell.CellPerioerty.backgroundColor = UIColor.redColor;
+            }
+            else if ([list.priority isEqualToString:@"Mid"]) {
+                cell.CellPerioerty.backgroundColor = UIColor.orangeColor;
+            }
+            else {
+                cell.CellPerioerty.backgroundColor = UIColor.greenColor;
+            }
+        }
+        
     }
     
     cell.CellTitle.text = list.name;
     cell.CellDate.text  = list.DateCreation;
-    
-    if ([list.priority isEqualToString:@"High"]) {
-        cell.CellPerioerty.backgroundColor = UIColor.redColor;
-    }
-    else if ([list.priority isEqualToString:@"Mid"]) {
-        cell.CellPerioerty.backgroundColor = UIColor.orangeColor;
-    }
-    else {
-        cell.CellPerioerty.backgroundColor = UIColor.greenColor;
-    }
     
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    if (_searchController.isActive) {
-        return _FilterTodo.count;
+    if (_isSorted == YES) {
+        
+        if (section == 0) {
+            return _HighTodo.count;
+        }
+        else if (section == 1) {
+            return _MedTodo.count;
+        }
+        else {
+            return _LowTodo.count;
+        }
     }
-    
-    return _todoArray.count;
+    else {
+        if (_searchController.isActive) {
+            _isSorted = NO;
+            return _FilterTodo.count;
+        }
+        
+        return _todoArray.count;
+    }
+    return 0;
 }
 
+
+
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
     
 }
 
@@ -179,18 +306,33 @@
         next.onece = [_FilterTodo objectAtIndex:indexPath.row];
     }
     else {
-        next.onece = [_todoArray objectAtIndex:indexPath.row];
+        
+        if (_isSorted == YES) {
+            if (indexPath.section == 0) {
+                next.onece = [_HighTodo objectAtIndex:indexPath.row];
+            }
+            else if (indexPath.section == 1) {
+                next.onece = [_MedTodo objectAtIndex:indexPath.row];
+            }
+            else {
+                next.onece = [_LowTodo objectAtIndex:indexPath.row];
+            }
+        }
+        else {
+            next.onece = [_todoArray objectAtIndex:indexPath.row];
+        }
+        
     }
     
     [self presentViewController:next animated:YES completion:nil];
     
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 95.0;
 }
 
--(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+-(void) updateSearchResultsForSearchController:(UISearchController *)searchController {
 
     UISearchBar *s = _searchController.searchBar;
     NSString *scopButton = [s.scopeButtonTitles objectAtIndex: s.selectedScopeButtonIndex];
