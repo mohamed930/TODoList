@@ -23,7 +23,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VII-GO-EfH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-330" y="317"/>
+            <point key="canvasLocation" x="436" y="316"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="h8a-p6-RVL">
@@ -39,9 +39,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yf4-ON-cEL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="372" y="317"/>
+            <point key="canvasLocation" x="1314.4000000000001" y="316.99507389162562"/>
         </scene>
-        <!--Do View Controller-->
+        <!--To-Do List-->
         <scene sceneID="Tv1-gH-PzQ">
             <objects>
                 <viewController id="wjt-GA-lha" customClass="TODoViewController" sceneMemberID="viewController">
@@ -50,53 +50,37 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nft-xe-fIA">
-                                <rect key="frame" x="0.0" y="164" width="375" height="565"/>
+                                <rect key="frame" x="0.0" y="104" width="375" height="625"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="wjt-GA-lha" id="oIa-rT-BTB"/>
                                     <outlet property="delegate" destination="wjt-GA-lha" id="gFE-Gm-8Zo"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="etB-5f-vMd">
-                                <rect key="frame" x="319" y="52" width="40" height="34"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="34" id="WiQ-Zp-XYY"/>
-                                    <constraint firstAttribute="width" constant="40" id="mxD-fT-WWk"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <state key="normal" title="+"/>
-                                <connections>
-                                    <action selector="BTNAdd:" destination="wjt-GA-lha" eventType="touchUpInside" id="fm0-vf-1Uc"/>
-                                </connections>
-                            </button>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="zEf-Bf-yPM">
-                                <rect key="frame" x="16" y="97" width="343" height="56"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </searchBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="i52-2e-QRD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="i52-2e-QRD" firstAttribute="top" secondItem="etB-5f-vMd" secondAttribute="top" constant="-8" id="17P-oy-2k0"/>
                             <constraint firstItem="nft-xe-fIA" firstAttribute="bottom" secondItem="i52-2e-QRD" secondAttribute="bottom" id="GZp-QV-qTh"/>
-                            <constraint firstItem="i52-2e-QRD" firstAttribute="trailing" secondItem="zEf-Bf-yPM" secondAttribute="trailing" constant="16" id="QGe-20-1Rg"/>
-                            <constraint firstItem="zEf-Bf-yPM" firstAttribute="leading" secondItem="i52-2e-QRD" secondAttribute="leading" constant="16" id="VwN-IR-rdi"/>
-                            <constraint firstItem="zEf-Bf-yPM" firstAttribute="top" secondItem="etB-5f-vMd" secondAttribute="bottom" constant="11" id="cNX-OA-Bhe"/>
-                            <constraint firstItem="i52-2e-QRD" firstAttribute="trailing" secondItem="etB-5f-vMd" secondAttribute="trailing" constant="16" id="iim-jR-1Fm"/>
+                            <constraint firstItem="nft-xe-fIA" firstAttribute="top" secondItem="i52-2e-QRD" secondAttribute="top" constant="16" id="ekN-BF-JLG"/>
                             <constraint firstItem="i52-2e-QRD" firstAttribute="trailing" secondItem="nft-xe-fIA" secondAttribute="trailing" id="psp-Z8-qtP"/>
-                            <constraint firstItem="nft-xe-fIA" firstAttribute="top" secondItem="zEf-Bf-yPM" secondAttribute="bottom" constant="11" id="wMP-GZ-fy7"/>
                             <constraint firstItem="nft-xe-fIA" firstAttribute="leading" secondItem="i52-2e-QRD" secondAttribute="leading" id="wzV-no-wYQ"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="icons8-todo-list-100-2" id="8Fi-eH-6rd"/>
+                    <navigationItem key="navigationItem" title="To-Do List" id="31c-EW-0aU">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="SGP-BU-GGr">
+                            <connections>
+                                <action selector="BTNAdd:" destination="wjt-GA-lha" id="jv2-p4-n9s"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
-                        <outlet property="SearchTextField" destination="zEf-Bf-yPM" id="ARR-Kr-ROM"/>
                         <outlet property="tableView" destination="nft-xe-fIA" id="xBU-K3-Yb3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yXL-ie-Ghl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1076" y="316.25615763546801"/>
+            <point key="canvasLocation" x="-356" y="316"/>
         </scene>
         <!--Note View Controller-->
         <scene sceneID="4V5-3R-3dQ">
@@ -249,7 +233,7 @@
                         <color key="selectedImageTintColor" systemColor="systemPinkColor"/>
                     </tabBar>
                     <connections>
-                        <segue destination="wjt-GA-lha" kind="relationship" relationship="viewControllers" id="1EY-1X-LX1"/>
+                        <segue destination="qfu-L4-6sV" kind="relationship" relationship="viewControllers" id="1EY-1X-LX1"/>
                         <segue destination="SSc-4J-fvb" kind="relationship" relationship="viewControllers" id="8nh-vK-ifp"/>
                         <segue destination="xkA-09-kgG" kind="relationship" relationship="viewControllers" id="gdu-Nl-n6o"/>
                     </connections>
@@ -257,6 +241,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="txx-8n-IzM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-545" y="-386"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="FK7-Zb-36D">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="qfu-L4-6sV" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="icons8-todo-list-100-2" id="8Fi-eH-6rd"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="OzQ-HA-ZJF">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="wjt-GA-lha" kind="relationship" relationship="rootViewController" id="JkM-MY-28q"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b0c-HE-nOX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1076" y="316.25615763546801"/>
         </scene>
     </scenes>
     <resources>

@@ -12,6 +12,8 @@
 
 @interface TODoViewController ()
 
+@property UISearchController *searchController;
+
 @end
 
 @implementation TODoViewController
@@ -24,8 +26,35 @@
     _todoArray = [[NSMutableArray alloc] init];
     // MARK:- TODO:- Read All TODOList.
     [self ReadTODOList];
+    [self initSearchController];
     
 }
+
+
+-(void) initSearchController {
+    
+    _searchController = [UISearchController new];
+    
+    [_searchController loadViewIfNeeded];
+    _searchController.searchResultsUpdater = self;
+    _searchController.obscuresBackgroundDuringPresentation = NO;
+    _searchController.searchBar.enablesReturnKeyAutomatically = NO;
+    _searchController.searchBar.returnKeyType = UIReturnKeyDone;
+    [self setDefinesPresentationContext:YES];
+    
+    self.navigationItem.searchController = _searchController;
+    self.navigationItem.hidesSearchBarWhenScrolling = false;
+    
+    NSMutableArray *buttonsName = [NSMutableArray new];
+    [buttonsName addObject:@"All"];
+    [buttonsName addObject:@"High"];
+    [buttonsName addObject:@"Mid"];
+    [buttonsName addObject:@"Low"];
+    
+    _searchController.searchBar.scopeButtonTitles = buttonsName;
+    _searchController.searchBar.delegate = self;
+}
+
 
 -(void) ReadTODOList {
     
@@ -98,13 +127,22 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     TODOList_Cell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
-    cell.CellTitle.text = [_todoArray objectAtIndex:indexPath.row].name;
-    cell.CellDate.text  = [_todoArray objectAtIndex:indexPath.row].DateCreation;
+    ToDoList *list = [ToDoList new];
     
-    if ([[_todoArray objectAtIndex:indexPath.row].priority isEqualToString:@"High"]) {
+    if (_searchController.isActive) {
+        list = [_FilterTodo objectAtIndex:indexPath.row];
+    }
+    else {
+        list = [_todoArray objectAtIndex:indexPath.row];
+    }
+    
+    cell.CellTitle.text = list.name;
+    cell.CellDate.text  = list.DateCreation;
+    
+    if ([list.priority isEqualToString:@"High"]) {
         cell.CellPerioerty.backgroundColor = UIColor.redColor;
     }
-    else if ([[_todoArray objectAtIndex:indexPath.row].priority isEqualToString:@"Mid"]) {
+    else if ([list.priority isEqualToString:@"Mid"]) {
         cell.CellPerioerty.backgroundColor = UIColor.orangeColor;
     }
     else {
@@ -115,6 +153,11 @@
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    if (_searchController.isActive) {
+        return _FilterTodo.count;
+    }
+    
     return _todoArray.count;
 }
 
@@ -131,15 +174,56 @@
     next.delegate = self;
     [next setIsEdit:YES];
     next.onece = [ToDoList new];
-    next.onece = [_todoArray objectAtIndex:indexPath.row];
+    
+    if(_searchController.isActive) {
+        next.onece = [_FilterTodo objectAtIndex:indexPath.row];
+    }
+    else {
+        next.onece = [_todoArray objectAtIndex:indexPath.row];
+    }
     
     [self presentViewController:next animated:YES completion:nil];
     
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 87.0;
+    return 95.0;
 }
 
+-(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+
+    UISearchBar *s = _searchController.searchBar;
+    NSString *scopButton = [s.scopeButtonTitles objectAtIndex: s.selectedScopeButtonIndex];
+    NSString *searchText = s.text;
+    
+    [self filterForSearchTextAndScopeButton:searchText :scopButton];
+}
+
+-(void) filterForSearchTextAndScopeButton:(NSString *) searchText : (NSString *) scopButton {
+    _FilterTodo = [NSMutableArray new];
+    
+    if ([_searchController.searchBar.text isEqualToString:@""]) {
+        
+        if ([scopButton isEqualToString:@"All"]) {
+            _FilterTodo = _todoArray;
+            
+            [_tableView reloadData];
+        }
+        else {
+            NSPredicate *pred = [NSPredicate predicateWithFormat:@"(priority like %@)", scopButton];
+            
+            _FilterTodo = [_todoArray filteredArrayUsingPredicate: pred];
+            
+            [_tableView reloadData];
+        }
+    }
+    else {
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"(name like %@)", searchText];
+        
+        _FilterTodo = [_todoArray filteredArrayUsingPredicate: pred];
+        
+        [_tableView reloadData];
+    }
+}
 
 @end

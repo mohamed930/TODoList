@@ -9,13 +9,15 @@
 #import "ToDoList.h"
 #import "ToDoProtocol.h"
 
-@interface TODoViewController : UIViewController <UITableViewDataSource,UITableViewDelegate ,ToDoProtocol>
+@interface TODoViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating ,ToDoProtocol>
 
-@property (weak, nonatomic) IBOutlet UISearchBar *SearchTextField;
+@property (weak, nonatomic) IBOutlet UINavigationBar *SearchtextField;
+
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property NSMutableArray<ToDoList *> *todoArray;
+@property NSArray<ToDoList *> *FilterTodo;
 
 - (IBAction)BTNAdd:(id)sender;
 
