@@ -91,28 +91,38 @@
 
 - (IBAction)BTNSort:(id)sender {
     
-    _isSorted = YES;
-    _HighTodo = [NSMutableArray new];
-    _MedTodo  = [NSMutableArray new];
-    _LowTodo  = [NSMutableArray new];
-    
-    _Sektion = [NSMutableArray new];
-    [_Sektion addObject:@"High"];
-    [_Sektion addObject:@"Mid"];
-    [_Sektion addObject:@"Low"];
-    
-    for (int i=0;i<(_todoArray.count);i++) {
-        if ([[_todoArray objectAtIndex:i].priority isEqualToString:@"High"]) {
-            [_HighTodo addObject: [_todoArray objectAtIndex:i]];
-        }
-        else if ([[_todoArray objectAtIndex:i].priority isEqualToString:@"Mid"]) {
-            [_MedTodo addObject: [_todoArray objectAtIndex:i]];
-        }
-        else if ([[_todoArray objectAtIndex:i].priority isEqualToString:@"Low"]) {
-            [_LowTodo addObject: [_todoArray objectAtIndex:i]];
-        }
+    if (_isSorted == YES) {
+        _isSorted = NO;
+        [_tableView reloadData];
+        
+        [_BTNSort setImage:[UIImage imageNamed:@"icons_0608-32-512-2"]];
     }
-    [_tableView reloadData];
+    else {
+        _isSorted = YES;
+        _HighTodo = [NSMutableArray new];
+        _MedTodo  = [NSMutableArray new];
+        _LowTodo  = [NSMutableArray new];
+        
+        _Sektion = [NSMutableArray new];
+        [_Sektion addObject:@"High"];
+        [_Sektion addObject:@"Mid"];
+        [_Sektion addObject:@"Low"];
+        
+        for (int i=0;i<(_todoArray.count);i++) {
+            if ([[_todoArray objectAtIndex:i].priority isEqualToString:@"High"]) {
+                [_HighTodo addObject: [_todoArray objectAtIndex:i]];
+            }
+            else if ([[_todoArray objectAtIndex:i].priority isEqualToString:@"Mid"]) {
+                [_MedTodo addObject: [_todoArray objectAtIndex:i]];
+            }
+            else if ([[_todoArray objectAtIndex:i].priority isEqualToString:@"Low"]) {
+                [_LowTodo addObject: [_todoArray objectAtIndex:i]];
+            }
+        }
+        [_tableView reloadData];
+        
+        [_BTNSort setImage:[UIImage imageNamed:@"icons_0608-32-515"]];
+    }
 }
 
 - (IBAction)BTNAdd:(id)sender {
@@ -218,6 +228,17 @@
     
     if (_searchController.isActive) {
         list = [_FilterTodo objectAtIndex:indexPath.row];
+        
+        if ([list.priority isEqualToString:@"High"]) {
+            cell.CellPerioerty.backgroundColor = UIColor.redColor;
+        }
+        else if ([list.priority isEqualToString:@"Mid"]) {
+            cell.CellPerioerty.backgroundColor = UIColor.orangeColor;
+        }
+        else {
+            cell.CellPerioerty.backgroundColor = UIColor.greenColor;
+        }
+        
     }
     else {
         
@@ -275,7 +296,6 @@
     }
     else {
         if (_searchController.isActive) {
-            _isSorted = NO;
             return _FilterTodo.count;
         }
         
@@ -333,6 +353,9 @@
 }
 
 -(void) updateSearchResultsForSearchController:(UISearchController *)searchController {
+    
+    _isSorted = NO;
+    [_tableView reloadData];
 
     UISearchBar *s = _searchController.searchBar;
     NSString *scopButton = [s.scopeButtonTitles objectAtIndex: s.selectedScopeButtonIndex];

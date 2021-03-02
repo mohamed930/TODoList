@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NoteViewController : UIViewController <SCAlertPickerDelegte , UITextFieldDelegate , UIPickerViewDelegate , UIPickerViewDataSource>
+@interface NoteViewController : UIViewController <SCAlertPickerDelegte, UIGestureRecognizerDelegate , UITextFieldDelegate , UIPickerViewDelegate , UIPickerViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITextField *NoteTitle;
 @property (weak, nonatomic) IBOutlet UITextView *NoteDetails;
@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UITextField *DeadLineLabel;
 @property (weak, nonatomic) IBOutlet UIButton *SaveButton;
 @property (weak, nonatomic) IBOutlet UIPickerView *StatePickerView;
+@property (weak, nonatomic) IBOutlet UILabel *PickStateLabel;
 
 
 @property UITapGestureRecognizer *tab;
@@ -30,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property id<ToDoProtocol> delegate;
 @property BOOL isEdit;
 @property ToDoList *onece;
+@property UIScreenEdgePanGestureRecognizer *screenedge;
 
 -(void) makecornerCriclewithoutborder:(UIView*) View;
 
@@ -44,14 +46,16 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) DonePressed;
 
 - (NSArray *)getTestData;
+
 - (void)SCAlertPicker:(SCAlertPicker *)SCAlertPicker ClickWithValues:(NSArray *)values;
+
 -(void)textFieldDidBeginEditing:(UITextField *)textField;
+
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component;
+
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component;
+
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component;
-
-
-
 
 @end
 

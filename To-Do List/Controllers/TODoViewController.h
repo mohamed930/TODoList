@@ -13,6 +13,8 @@
 
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *BTNSort;
+
 
 @property NSMutableArray<ToDoList *> *todoArray;
 @property NSArray<ToDoList *> *FilterTodo;

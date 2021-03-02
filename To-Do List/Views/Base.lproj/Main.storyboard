@@ -80,6 +80,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="BTNSort" destination="VmK-Vf-BoP" id="MSc-5G-GzU"/>
                         <outlet property="tableView" destination="nft-xe-fIA" id="xBU-K3-Yb3"/>
                     </connections>
                 </viewController>
@@ -142,7 +143,7 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DateIcon" translatesAutoresizingMaskIntoConstraints="NO" id="clC-Tx-zM5">
                                 <rect key="frame" x="16" y="379" width="30" height="30"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick the state:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J05-d7-sEj">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick the state:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J05-d7-sEj">
                                 <rect key="frame" x="16" y="438" width="212" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -216,6 +217,7 @@
                         <outlet property="DeadLineLabel" destination="mEX-vK-g9f" id="3RW-Vb-9c7"/>
                         <outlet property="NoteDetails" destination="5H8-Ml-rU9" id="wcF-9N-Pek"/>
                         <outlet property="NoteTitle" destination="4MA-1c-JIP" id="HeU-Du-Xua"/>
+                        <outlet property="PickStateLabel" destination="J05-d7-sEj" id="WYA-fI-Yk2"/>
                         <outlet property="PriorityLabel" destination="7la-HB-t12" id="GrJ-6q-zVH"/>
                         <outlet property="PriorityView" destination="haq-st-aHc" id="YN0-TB-iy6"/>
                         <outlet property="SaveButton" destination="ybe-st-DOe" id="g82-mk-IMe"/>

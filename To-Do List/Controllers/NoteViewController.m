@@ -21,10 +21,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _screenedge = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(Back:)];
+    [_screenedge setEdges:UIRectEdgeLeft];
+    [_screenedge setDelegate:self];
+    [self.view addGestureRecognizer: _screenedge];
+    
     _arr = [NSMutableArray new];
-    [_arr addObject:@"To-Do"];
-    [_arr addObject:@"In progress"];
-    [_arr addObject:@"Completed"];
     _datePicker = [[UIDatePicker alloc] init];
     
     if (_isEdit == NO) {
@@ -34,7 +36,7 @@
         [_NoteDetails setEditable:YES];
         [_SaveButton setTitle:@"Save" forState:UIControlStateNormal];
         [_PriorityLabel setUserInteractionEnabled:YES];
-        [_StatePickerView setUserInteractionEnabled:YES];
+        [_StatePickerView setHidden:YES];
         [self makecornerCriclewithoutborder:_PriorityView];
     }
     else {
@@ -48,6 +50,7 @@
         [_SaveButton setTitle:@"Edit" forState:UIControlStateNormal];
         [_PriorityLabel setUserInteractionEnabled:NO];
         [_StatePickerView setUserInteractionEnabled:NO];
+        [_PickStateLabel setHidden:NO];
         
         if ([_PriorityLabel.text isEqualToString:@"High"]) {
             [self makecornerCriclewithoutborder:_PriorityView];
@@ -62,14 +65,20 @@
             _PriorityView.backgroundColor = UIColor.greenColor;
         }
         
-        int index = 0;
-        while (index < _arr.count) {
-            NSString *row = [_arr objectAtIndex:index];
-            if ([row isEqualToString:_onece.state]) {
-                [_StatePickerView selectRow:index inComponent:0 animated:YES];
-                break;
-            }
-            index++;
+        if ([_onece.state isEqualToString:@"To-Do"]) {
+            [_arr addObject:@"To-Do"];
+            [_arr addObject:@"In progress"];
+            [_arr addObject:@"Completed"];
+            [_StatePickerView selectRow:0 inComponent:0 animated:YES];
+        }
+        else if ([_onece.state isEqualToString:@"In progress"]) {
+            [_arr addObject:@"In progress"];
+            [_arr addObject:@"Completed"];
+            [_StatePickerView selectRow:0 inComponent:0 animated:YES];
+        }
+        else {
+            [_arr addObject:@"Completed"];
+            [_StatePickerView selectRow:0 inComponent:0 animated:YES];
         }
         
     }
@@ -107,7 +116,7 @@
     list.name = _NoteTitle.text;
     list.priority = _PriorityLabel.text;
     list.DeadLineData = _DeadLineLabel.text;
-    list.state = _PickState;
+    list.state = @"To-Do";
     list.desc = _NoteDetails.text;
   
     NSDate *date = [NSDate new];
@@ -151,6 +160,7 @@
             list.DeadLineData = self->_DeadLineLabel.text;
             list.state = self->_PickState;
             list.desc = self->_NoteDetails.text;
+            list.DateCreation = self->_onece.DateCreation;
             
             [self->_delegate SendNewNote:list :YES];
             [self dismissViewControllerAnimated:YES completion:nil];
@@ -207,6 +217,10 @@
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
+}
+
+-(void) Back:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma - Generate Test Data
