@@ -23,6 +23,7 @@
 @property NSMutableArray<ToDoList *> *LowTodo;
 @property NSMutableArray *Sektion;
 @property BOOL isSorted;
+@property NSString *id;
 
 - (IBAction)BTNAdd:(id)sender;
 - (IBAction)BTNSort:(id)sender;

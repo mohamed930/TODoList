@@ -308,6 +308,65 @@
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        printf("Deleted\n");
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Attention" message:@"Are you sure to delete todo?" preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            printf("Deleted\n");
+            
+            if (self->_isSorted == NO) {
+                [self->_todoArray removeObjectAtIndex:indexPath.row];
+                [self->_tableView reloadData];
+            }
+            else {
+                self->_id = [NSString new];
+                if (indexPath.section == 0) {
+                    self->_id = [self->_HighTodo objectAtIndex:indexPath.row].ID;
+                    [self->_HighTodo removeObjectAtIndex:indexPath.row];
+                    
+                    for (int i=0; i<self->_todoArray.count; i++) {
+                        if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
+                            [self->_todoArray removeObjectAtIndex:i];
+                            break;
+                        }
+                    }
+                    [self->_tableView reloadData];
+                }
+                else if (indexPath.section == 1) {
+                    self->_id = [self->_MedTodo objectAtIndex:indexPath.row].ID;
+                    [self->_MedTodo removeObjectAtIndex:indexPath.row];
+                    
+                    for (int i=0; i<self->_todoArray.count; i++) {
+                        if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
+                            [self->_todoArray removeObjectAtIndex:i];
+                            break;
+                        }
+                    }
+                    [self->_tableView reloadData];
+                }
+                else {
+                    self->_id = [self->_LowTodo objectAtIndex:indexPath.row].ID;
+                    [self->_LowTodo removeObjectAtIndex:indexPath.row];
+                    
+                    for (int i=0; i<self->_todoArray.count; i++) {
+                        if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
+                            [self->_todoArray removeObjectAtIndex:i];
+                            break;
+                        }
+                    }
+                    [self->_tableView reloadData];
+                }
+            }
+            
+        }]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        
+    }
     
     
 }
