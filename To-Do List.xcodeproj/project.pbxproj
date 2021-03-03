@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D9193C9F25EF25DF001AF7BC /* InprgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9193C9E25EF25DF001AF7BC /* InprgressViewController.m */; };
+		D9193CA425EF29E5001AF7BC /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9193CA325EF29E5001AF7BC /* DoneViewController.m */; };
 		D9879ADC25E834110085F130 /* NoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9879ADB25E834110085F130 /* NoteViewController.m */; };
 		D9F15CB825E7C4E400F453AA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D9F15CB725E7C4E400F453AA /* AppDelegate.m */; };
 		D9F15CBE25E7C4E400F453AA /* TODoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9F15CBD25E7C4E400F453AA /* TODoViewController.m */; };
@@ -25,6 +27,10 @@
 		3627C953244E71E39994C20E /* Pods_To_Do_List.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_To_Do_List.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C317F2093C96F7F68847058 /* Pods-To-Do List.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-To-Do List.release.xcconfig"; path = "Target Support Files/Pods-To-Do List/Pods-To-Do List.release.xcconfig"; sourceTree = "<group>"; };
 		AFE3592719C81036701F189E /* Pods-To-Do List.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-To-Do List.debug.xcconfig"; path = "Target Support Files/Pods-To-Do List/Pods-To-Do List.debug.xcconfig"; sourceTree = "<group>"; };
+		D9193C9D25EF25DF001AF7BC /* InprgressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InprgressViewController.h; sourceTree = "<group>"; };
+		D9193C9E25EF25DF001AF7BC /* InprgressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InprgressViewController.m; sourceTree = "<group>"; };
+		D9193CA225EF29E5001AF7BC /* DoneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DoneViewController.h; sourceTree = "<group>"; };
+		D9193CA325EF29E5001AF7BC /* DoneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DoneViewController.m; sourceTree = "<group>"; };
 		D9879ADA25E834110085F130 /* NoteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NoteViewController.h; sourceTree = "<group>"; };
 		D9879ADB25E834110085F130 /* NoteViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NoteViewController.m; sourceTree = "<group>"; };
 		D9EC3E0825EAD917003B8420 /* ToDoProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToDoProtocol.h; sourceTree = "<group>"; };
@@ -119,6 +125,10 @@
 			children = (
 				D9F15CBC25E7C4E400F453AA /* TODoViewController.h */,
 				D9F15CBD25E7C4E400F453AA /* TODoViewController.m */,
+				D9193C9D25EF25DF001AF7BC /* InprgressViewController.h */,
+				D9193C9E25EF25DF001AF7BC /* InprgressViewController.m */,
+				D9193CA225EF29E5001AF7BC /* DoneViewController.h */,
+				D9193CA325EF29E5001AF7BC /* DoneViewController.m */,
 				D9879ADA25E834110085F130 /* NoteViewController.h */,
 				D9879ADB25E834110085F130 /* NoteViewController.m */,
 			);
@@ -281,9 +291,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9193C9F25EF25DF001AF7BC /* InprgressViewController.m in Sources */,
 				D9F15CE325E7CCFF00F453AA /* TODOList Cell.m in Sources */,
 				D9F15CEA25E7D54100F453AA /* ToDoList.m in Sources */,
 				D9F15CBE25E7C4E400F453AA /* TODoViewController.m in Sources */,
+				D9193CA425EF29E5001AF7BC /* DoneViewController.m in Sources */,
 				D9F15CB825E7C4E400F453AA /* AppDelegate.m in Sources */,
 				D9879ADC25E834110085F130 /* NoteViewController.m in Sources */,
 				D9F15CC925E7C4E400F453AA /* main.m in Sources */,

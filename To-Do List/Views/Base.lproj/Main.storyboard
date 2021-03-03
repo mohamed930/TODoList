@@ -9,37 +9,89 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--In progress List-->
         <scene sceneID="peQ-ud-gvH">
             <objects>
-                <viewController id="SSc-4J-fvb" sceneMemberID="viewController">
+                <viewController id="SSc-4J-fvb" customClass="InprgressViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WAq-16-mcz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Xvj-UJ-j07">
+                                <rect key="frame" x="0.0" y="104" width="375" height="625"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="SSc-4J-fvb" id="98u-Ua-6YP"/>
+                                    <outlet property="delegate" destination="SSc-4J-fvb" id="QCB-RW-5qY"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="VnH-N2-afB"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="VnH-N2-afB" firstAttribute="bottom" secondItem="Xvj-UJ-j07" secondAttribute="bottom" id="3py-q2-aMY"/>
+                            <constraint firstItem="VnH-N2-afB" firstAttribute="trailing" secondItem="Xvj-UJ-j07" secondAttribute="trailing" id="8fL-cI-78G"/>
+                            <constraint firstItem="Xvj-UJ-j07" firstAttribute="leading" secondItem="VnH-N2-afB" secondAttribute="leading" id="InH-lc-kra"/>
+                            <constraint firstItem="Xvj-UJ-j07" firstAttribute="top" secondItem="VnH-N2-afB" secondAttribute="top" constant="16" id="Y3c-xF-um0"/>
+                        </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="icons8-in-progress-50" id="PV5-DV-yxF"/>
+                    <navigationItem key="navigationItem" title="In progress List" id="kwm-nL-fbQ">
+                        <barButtonItem key="leftBarButtonItem" image="icons_0608-32-512-2" id="usM-rg-zFv">
+                            <connections>
+                                <action selector="BTNSort:" destination="SSc-4J-fvb" id="cNa-Kz-XeS"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="BTNSort" destination="usM-rg-zFv" id="tuh-eU-fTc"/>
+                        <outlet property="tableView" destination="Xvj-UJ-j07" id="ns1-kz-863"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VII-GO-EfH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="436" y="316"/>
+            <point key="canvasLocation" x="1149.5999999999999" y="316.99507389162562"/>
         </scene>
-        <!--View Controller-->
+        <!--Done List-->
         <scene sceneID="h8a-p6-RVL">
             <objects>
-                <viewController id="xkA-09-kgG" sceneMemberID="viewController">
+                <viewController id="xkA-09-kgG" customClass="DoneViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jRW-wO-5ju">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CdL-V9-H3Y">
+                                <rect key="frame" x="0.0" y="104" width="376" height="625"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="xkA-09-kgG" id="dLW-2y-p09"/>
+                                    <outlet property="delegate" destination="xkA-09-kgG" id="Wea-gS-gXb"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="xR3-1H-VfV"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="xR3-1H-VfV" firstAttribute="bottom" secondItem="CdL-V9-H3Y" secondAttribute="bottom" id="0QZ-XL-SYi"/>
+                            <constraint firstItem="CdL-V9-H3Y" firstAttribute="leading" secondItem="xR3-1H-VfV" secondAttribute="leading" id="3lg-Aq-qDj"/>
+                            <constraint firstItem="CdL-V9-H3Y" firstAttribute="trailing" secondItem="xR3-1H-VfV" secondAttribute="trailing" constant="1" id="vnx-ES-4m5"/>
+                            <constraint firstItem="CdL-V9-H3Y" firstAttribute="top" secondItem="xR3-1H-VfV" secondAttribute="top" constant="16" id="yGF-TY-czo"/>
+                        </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="Webp.net-resizeimage copy 2" id="QQu-4d-lUy"/>
+                    <navigationItem key="navigationItem" title="Done List" id="zKW-q2-Hi9">
+                        <barButtonItem key="leftBarButtonItem" image="icons_0608-32-512-2" id="qfp-fs-SJZ">
+                            <connections>
+                                <action selector="BTNSort:" destination="xkA-09-kgG" id="QRW-CS-X8C"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="BTNSort" destination="qfp-fs-SJZ" id="5T6-Qa-g4U"/>
+                        <outlet property="tableView" destination="CdL-V9-H3Y" id="X2m-Dk-alL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yf4-ON-cEL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1314.4000000000001" y="316.99507389162562"/>
+            <point key="canvasLocation" x="2632.8000000000002" y="315.51724137931035"/>
         </scene>
         <!--To-Do List-->
         <scene sceneID="Tv1-gH-PzQ">
@@ -241,8 +293,8 @@
                     </tabBar>
                     <connections>
                         <segue destination="qfu-L4-6sV" kind="relationship" relationship="viewControllers" id="1EY-1X-LX1"/>
-                        <segue destination="SSc-4J-fvb" kind="relationship" relationship="viewControllers" id="8nh-vK-ifp"/>
-                        <segue destination="xkA-09-kgG" kind="relationship" relationship="viewControllers" id="gdu-Nl-n6o"/>
+                        <segue destination="Ifl-ip-EXu" kind="relationship" relationship="viewControllers" id="8nh-vK-ifp"/>
+                        <segue destination="DuT-4r-nrZ" kind="relationship" relationship="viewControllers" id="gdu-Nl-n6o"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="txx-8n-IzM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -267,6 +319,44 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b0c-HE-nOX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1076" y="316.25615763546801"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="YUR-3G-Mhp">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ifl-ip-EXu" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="icons8-in-progress-50" id="PV5-DV-yxF"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="RKL-mF-CZK">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="SSc-4J-fvb" kind="relationship" relationship="rootViewController" id="L9U-eE-BXf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lcz-AC-Qua" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="436" y="315.51724137931035"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="jOB-bS-zxz">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DuT-4r-nrZ" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="Webp.net-resizeimage copy 2" id="QQu-4d-lUy"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="WM4-4d-Oka">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="xkA-09-kgG" kind="relationship" relationship="rootViewController" id="cx1-lp-8wD"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gxB-2K-bah" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1905" y="317"/>
         </scene>
     </scenes>
     <resources>
