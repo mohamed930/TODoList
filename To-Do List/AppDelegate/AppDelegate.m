@@ -20,6 +20,8 @@
     
     IQKeyboardManager.sharedManager.enable = YES;
     
+    NSLog(@"%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject);
+    
     return YES;
 }
 

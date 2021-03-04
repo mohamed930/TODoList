@@ -61,32 +61,13 @@
 -(void) ReadTODOList {
     
     ToDoList *t = [ToDoList new];
-    NSUUID *id1 = [NSUUID new];
-    t.ID = [id1 UUIDString];
-    t.name = @"Eat";
-    t.DateCreation = @"2020-05-10";
-    t.priority = @"High";
-    t.state = @"In progress";
-    [_todoArray addObject: t];
     
-    t = [ToDoList new];
-    id1 = [NSUUID new];
-    t.ID = [id1 UUIDString];
-    t.name = @"Spa";
-    t.DateCreation = @"2020-05-10";
-    t.priority = @"Mid";
-    t.state = @"In progress";
-    [_todoArray addObject: t];
+    NSArray<ToDoList *> *array = [t loadCustomObjectWithKey:@"Notes"];
     
-    t = [ToDoList new];
-    id1 = [NSUUID new];
-    t.ID = [id1 UUIDString];
-    t.name = @"Sleep";
-    t.DateCreation = @"2020-05-10";
-    t.priority = @"Low";
-    t.state = @"Completed";
-    [_todoArray addObject: t];
-    //[_tableView reloadData];
+    for (int i=0;i<(array.count);i++) {
+        [_todoArray addObject:[array objectAtIndex:i]];
+    }
+    [_tableView reloadData];
 }
 
 - (IBAction)BTNSort:(id)sender {
@@ -152,21 +133,33 @@
             
             if ([t.priority isEqualToString:@"High"]) {
                 [_HighTodo addObject: t];
+                [_todoArray addObject:t];
                 [_tableView reloadData];
+                ToDoList *t1 = [ToDoList new];
+                [t1 saveCustomObject:_todoArray key:@"Notes"];
             }
             else if ([t.priority isEqualToString:@"Mid"]) {
                 [_MedTodo addObject: t];
+                [_todoArray addObject:t];
                 [_tableView reloadData];
+                ToDoList *t1 = [ToDoList new];
+                [t1 saveCustomObject:_todoArray key:@"Notes"];
             }
             else {
                 [_LowTodo addObject: t];
+                [_todoArray addObject:t];
                 [_tableView reloadData];
+                ToDoList *t1 = [ToDoList new];
+                [t1 saveCustomObject:_todoArray key:@"Notes"];
             }
             
         }
         else {
             [_todoArray addObject: t];
             [_tableView reloadData];
+            
+            ToDoList *t1 = [ToDoList new];
+            [t1 saveCustomObject:_todoArray key:@"Notes"];
         }
         
     }
