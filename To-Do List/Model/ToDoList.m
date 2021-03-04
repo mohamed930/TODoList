@@ -49,9 +49,10 @@
 - (NSArray<ToDoList *> *)loadCustomObjectWithKey:(NSString *)key {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *encodedObject = [defaults objectForKey:key];
-    NSArray<ToDoList *> *object = [NSKeyedUnarchiver unarchiveObjectWithData:encodedObject];
-    //NSArray<ToDoList *> *object = [NSKeyedUnarchiver unarchivedObjectOfClass:ToDoList.self fromData:encodedObject error:nil];
-    //ToDoList *object = [NSKeyedUnarchiver unarchivedObjectOfClass:ToDoList.self fromData:encodedObject error:nil];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:encodedObject error:nil];
+    [unarchiver setRequiresSecureCoding:NO];
+    NSArray<ToDoList *> *object = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+    //[NSKeyedUnarchiver unarchiveObjectWithData:encodedObject]; // Old Way Library.
     return object;
 }
 

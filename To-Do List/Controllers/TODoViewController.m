@@ -169,12 +169,15 @@
             
             if ([t.priority isEqualToString:@"High"]) {
                 [self UpdateInTable:_HighTodo :t];
+                [self UpdateInTable:_todoArray :t];
             }
             else if ([t.priority isEqualToString:@"Mid"]) {
                 [self UpdateInTable:_MedTodo :t];
+                [self UpdateInTable:_todoArray :t];
             }
             else {
                 [self UpdateInTable:_LowTodo :t];
+                [self UpdateInTable:_todoArray :t];
             }
             
         }
@@ -194,6 +197,8 @@
         }
     }
     [arr addObject: t];
+    ToDoList *t1 = [ToDoList new];
+    [t1 saveCustomObject:arr key:@"Notes"];
     [_tableView reloadData];
 }
 
@@ -314,9 +319,12 @@
             if (self->_isSorted == NO) {
                 [self->_todoArray removeObjectAtIndex:indexPath.row];
                 [self->_tableView reloadData];
+                ToDoList *t = [ToDoList new];
+                [t saveCustomObject:self->_todoArray key:@"Notes"];
             }
             else {
                 self->_id = [NSString new];
+                ToDoList *t = [ToDoList new];
                 if (indexPath.section == 0) {
                     self->_id = [self->_HighTodo objectAtIndex:indexPath.row].ID;
                     [self->_HighTodo removeObjectAtIndex:indexPath.row];
@@ -324,6 +332,7 @@
                     for (int i=0; i<self->_todoArray.count; i++) {
                         if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
                             [self->_todoArray removeObjectAtIndex:i];
+                            [t saveCustomObject:self->_todoArray key:@"Notes"];
                             break;
                         }
                     }
@@ -336,6 +345,7 @@
                     for (int i=0; i<self->_todoArray.count; i++) {
                         if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
                             [self->_todoArray removeObjectAtIndex:i];
+                            [t saveCustomObject:self->_todoArray key:@"Notes"];
                             break;
                         }
                     }
@@ -348,6 +358,7 @@
                     for (int i=0; i<self->_todoArray.count; i++) {
                         if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
                             [self->_todoArray removeObjectAtIndex:i];
+                            [t saveCustomObject:self->_todoArray key:@"Notes"];
                             break;
                         }
                     }

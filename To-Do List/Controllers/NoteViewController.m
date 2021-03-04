@@ -64,6 +64,8 @@
             _PriorityView.backgroundColor = UIColor.greenColor;
         }
         
+        _PickState = _onece.state;
+        
         if ([_onece.state isEqualToString:@"To-Do"]) {
             [_arr addObject:@"To-Do"];
             [_arr addObject:@"In progress"];
