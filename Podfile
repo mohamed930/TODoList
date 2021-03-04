@@ -8,5 +8,4 @@ target 'To-Do List' do
   # Pods for To-Do List
   pod 'IQKeyboardManager'
   pod 'SCAlertPicker'
-  pod 'UIAlertDateTimePicker'
 end

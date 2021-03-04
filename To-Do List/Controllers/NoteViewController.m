@@ -7,7 +7,6 @@
 
 #import "NoteViewController.h"
 #import <SCAlertPicker.h>
-#import <UIAlertDateTimePicker.h>
 #import "ToDoList.h"
 
 @interface NoteViewController ()
@@ -127,23 +126,6 @@
     NSString *result = [formatter stringFromDate: date];
     
     list.DateCreation = result;
-    
-    
- //   NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-//    [def setValue:list.ID forKey:@"NoteID"];
-//    [def setValue:list.name forKey:@"NoteName"];
-//    [def setValue:list.priority forKey:@"NotePriority"];
-//    [def setValue:list.DeadLineData forKey:@"NoteDeadLine"];
-//    [def setValue:list.state forKey:@"NoteState"];
-//    [def setValue:list.DateCreation forKey:@"NoteDateCreation"];
-  //  NSData *res = [NSKeyedArchiver archivedDataWithRootObject:arr requiringSecureCoding:YES error:nil];
-  //  [def setObject:res forKey:@"NewNote"];
-    
- //   [def synchronize];
-    //[[NSUserDefaults standardUserDefaults] setObject:NoteData forKey:@"NewNote"];
-    
-    
-    
     [_delegate SendNewNote: list:NO];
     [self dismissViewControllerAnimated:YES completion:nil];
     
