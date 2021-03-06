@@ -29,10 +29,12 @@
     
     [_tableView registerNib:[UINib nibWithNibName:@"TODOList Cell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     
-    _todoArray = [[NSMutableArray alloc] init];
     // MARK:- TODO:- Read All TODOList.
     [self ReadTODOList];
     [self initSearchController];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTestNotification:) name:@"Changed" object:nil];
+
 }
 
 -(void) initSearchController {
@@ -61,6 +63,7 @@
 
 -(void) ReadTODOList {
     
+    _todoArray = [[NSMutableArray alloc] init];
     ToDoList *t = [ToDoList new];
     NSArray<ToDoList *> *GetArray = [t loadCustomObjectWithKey:@"Notes"];
     
@@ -132,6 +135,7 @@
                     [t saveCustomObject:_arr key:@"Notes"];
                 }
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"EditChanged" object:self];
         }
         else if ([t.priority isEqualToString:@"Mid"]) {
             [self UpdateInTableWithoutSave:_MedTodo :t];
@@ -145,6 +149,7 @@
                     [t saveCustomObject:_arr key:@"Notes"];
                 }
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"EditChanged" object:self];
             
         }
         else {
@@ -159,6 +164,7 @@
                     [t saveCustomObject:_arr key:@"Notes"];
                 }
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"EditChanged" object:self];
         }
         
     }
@@ -215,6 +221,7 @@
         
         [arr removeObjectAtIndex:_rowNumber];
         [_tableView reloadData];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"EditChanged" object:self];
     }
     else {
         printf("FDone\n");
@@ -231,6 +238,7 @@
                 break;
             }
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"EditChanged" object:self];
     }
 }
 
@@ -365,6 +373,7 @@
                 // Deleted in tableView.
                 [self->_todoArray removeObjectAtIndex:indexPath.row];
                 [self->_tableView reloadData];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"EditChanged" object:self];
             }
             else {
                 self->_id = [NSString new];
@@ -396,6 +405,7 @@
                         }
                     }
                     [self->_tableView reloadData];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"EditChanged" object:self];
                 }
                 else if (indexPath.section == 1) {
                     
@@ -425,6 +435,7 @@
                         }
                     }
                     [self->_tableView reloadData];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"EditChanged" object:self];
                 }
                 else {
                     
@@ -454,6 +465,7 @@
                         }
                     }
                     [self->_tableView reloadData];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"EditChanged" object:self];
                 }
             }
             
@@ -544,6 +556,10 @@
         
         [_tableView reloadData];
     }
+}
+
+- (void) receiveTestNotification:(NSNotification *) notification {
+    [self ReadTODOList];
 }
 
 

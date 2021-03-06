@@ -60,6 +60,8 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK:- TODO:- This Method For Protocol.
 -(void) SendNewNote:(ToDoList *) t :(BOOL) EditTage;
 
+- (void) receiveTestNotification:(NSNotification *) notification;
+
 
 @end
 

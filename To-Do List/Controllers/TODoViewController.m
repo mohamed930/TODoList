@@ -25,10 +25,10 @@
     
     [_tableView registerNib:[UINib nibWithNibName:@"TODOList Cell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     
-    _todoArray = [[NSMutableArray alloc] init];
     // MARK:- TODO:- Read All TODOList.
     [self ReadTODOList];
     [self initSearchController];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTestNotification:) name:@"EditChanged" object:nil];
     
 }
 
@@ -61,6 +61,7 @@
 -(void) ReadTODOList {
     
     ToDoList *t = [ToDoList new];
+    _todoArray = [[NSMutableArray alloc] init];
     
     NSArray<ToDoList *> *array = [t loadCustomObjectWithKey:@"Notes"];
     
@@ -137,6 +138,7 @@
                 [_tableView reloadData];
                 ToDoList *t1 = [ToDoList new];
                 [t1 saveCustomObject:_todoArray key:@"Notes"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
             }
             else if ([t.priority isEqualToString:@"Mid"]) {
                 [_MedTodo addObject: t];
@@ -144,6 +146,7 @@
                 [_tableView reloadData];
                 ToDoList *t1 = [ToDoList new];
                 [t1 saveCustomObject:_todoArray key:@"Notes"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
             }
             else {
                 [_LowTodo addObject: t];
@@ -151,6 +154,7 @@
                 [_tableView reloadData];
                 ToDoList *t1 = [ToDoList new];
                 [t1 saveCustomObject:_todoArray key:@"Notes"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
             }
             
         }
@@ -160,6 +164,8 @@
             
             ToDoList *t1 = [ToDoList new];
             [t1 saveCustomObject:_todoArray key:@"Notes"];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
         }
         
     }
@@ -170,19 +176,23 @@
             if ([t.priority isEqualToString:@"High"]) {
                 [self UpdateInTable:_HighTodo :t];
                 [self UpdateInTable:_todoArray :t];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
             }
             else if ([t.priority isEqualToString:@"Mid"]) {
                 [self UpdateInTable:_MedTodo :t];
                 [self UpdateInTable:_todoArray :t];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
             }
             else {
                 [self UpdateInTable:_LowTodo :t];
                 [self UpdateInTable:_todoArray :t];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
             }
             
         }
         else {
             [self UpdateInTable:_todoArray :t];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
         }
     }
 }
@@ -321,6 +331,7 @@
                 [self->_tableView reloadData];
                 ToDoList *t = [ToDoList new];
                 [t saveCustomObject:self->_todoArray key:@"Notes"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
             }
             else {
                 self->_id = [NSString new];
@@ -333,6 +344,7 @@
                         if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
                             [self->_todoArray removeObjectAtIndex:i];
                             [t saveCustomObject:self->_todoArray key:@"Notes"];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
                             break;
                         }
                     }
@@ -346,6 +358,7 @@
                         if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
                             [self->_todoArray removeObjectAtIndex:i];
                             [t saveCustomObject:self->_todoArray key:@"Notes"];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
                             break;
                         }
                     }
@@ -359,6 +372,7 @@
                         if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
                             [self->_todoArray removeObjectAtIndex:i];
                             [t saveCustomObject:self->_todoArray key:@"Notes"];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
                             break;
                         }
                     }
@@ -452,6 +466,10 @@
         
         [_tableView reloadData];
     }
+}
+
+- (void) receiveTestNotification:(NSNotification *) notification {
+    [self ReadTODOList];
 }
 
 @end
