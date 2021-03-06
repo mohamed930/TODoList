@@ -13,6 +13,8 @@
 @interface InprgressViewController ()
 
 @property UISearchController *searchController;
+@property NSMutableArray<ToDoList *> *arr;
+@property NSInteger rowNumber;
 
 @end
 
@@ -20,8 +22,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    printf("View (2) reloaded Successfully!\n");
     
     _isSorted = NO;
+    _rowNumber = 0;
     
     [_tableView registerNib:[UINib nibWithNibName:@"TODOList Cell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     
@@ -58,22 +62,16 @@
 -(void) ReadTODOList {
     
     ToDoList *t = [ToDoList new];
-    NSUUID *id1 = [NSUUID new];
-    t.ID = [id1 UUIDString];
-    t.name = @"Eat";
-    t.DateCreation = @"2020-05-10";
-    t.priority = @"High";
-    t.state = @"In progress";
-    [_todoArray addObject: t];
+    NSArray<ToDoList *> *GetArray = [t loadCustomObjectWithKey:@"Notes"];
     
-    t = [ToDoList new];
-    id1 = [NSUUID new];
-    t.ID = [id1 UUIDString];
-    t.name = @"Spa";
-    t.DateCreation = @"2020-05-10";
-    t.priority = @"Mid";
-    t.state = @"In progress";
-    [_todoArray addObject: t];
+    for (int i=0;i<GetArray.count;i++) {
+        if ([[GetArray objectAtIndex:i].state isEqualToString:@"In progress"]) {
+            [_todoArray addObject:[GetArray objectAtIndex:i]];
+        }
+    }
+    _arr = [NSMutableArray new];
+    _arr = [NSMutableArray arrayWithArray:GetArray];
+    [_tableView reloadData];
 }
 
 - (IBAction)BTNSort:(id)sender {
@@ -120,62 +118,120 @@
 // -------------------------
 -(void) SendNewNote:(ToDoList *) t :(BOOL) EditTage {
     
-    if (EditTage == NO) {
+    if (_isSorted == YES) {
         
-        if (_isSorted == YES) {
+        if ([t.priority isEqualToString:@"High"]) {
+            [self UpdateInTable:_HighTodo :t];
+            [self UpdateInTableWithoutSave:_todoArray :t];
             
-            if ([t.priority isEqualToString:@"High"]) {
-                [_HighTodo addObject: t];
-                [_tableView reloadData];
+            // Save in DataBase.
+            for (int i=0;i<(_arr.count);i++) {
+                if ([t.ID isEqualToString: [_arr objectAtIndex:i].ID]) {
+                    [_arr removeObjectAtIndex: i];
+                    [_arr addObject: t];
+                    [t saveCustomObject:_arr key:@"Notes"];
+                }
             }
-            else if ([t.priority isEqualToString:@"Mid"]) {
-                [_MedTodo addObject: t];
-                [_tableView reloadData];
-            }
-            else {
-                [_LowTodo addObject: t];
-                [_tableView reloadData];
+        }
+        else if ([t.priority isEqualToString:@"Mid"]) {
+            [self UpdateInTableWithoutSave:_MedTodo :t];
+            [self UpdateInTableWithoutSave:_todoArray :t];
+            
+            // Save in DataBase.
+            for (int i=0;i<(_arr.count);i++) {
+                if ([t.ID isEqualToString: [_arr objectAtIndex:i].ID]) {
+                    [_arr removeObjectAtIndex: i];
+                    [_arr addObject: t];
+                    [t saveCustomObject:_arr key:@"Notes"];
+                }
             }
             
         }
         else {
-            [_todoArray addObject: t];
-            [_tableView reloadData];
+            [self UpdateInTable:_LowTodo :t];
+            [self UpdateInTableWithoutSave:_todoArray :t];
+            
+            // Save in DataBase.
+            for (int i=0;i<(_arr.count);i++) {
+                if ([t.ID isEqualToString: [_arr objectAtIndex:i].ID]) {
+                    [_arr removeObjectAtIndex: i];
+                    [_arr addObject: t];
+                    [t saveCustomObject:_arr key:@"Notes"];
+                }
+            }
         }
         
     }
     else {
-        
-        if (_isSorted == YES) {
-            
-            if ([t.priority isEqualToString:@"High"]) {
-                [self UpdateInTable:_HighTodo :t];
+        // Done in Test.
+        [self UpdateInTable:_todoArray :t];
+    }
+}
+
+-(void) UpdateInTableWithoutSave:(NSMutableArray<ToDoList *> *) arr : (ToDoList *) t {
+    
+    // Update on Table View.
+    if ([t.state isEqualToString:@"Completed"]) {
+        for (int i=0;i<([arr count]); i++) {
+            if (t.ID == [arr objectAtIndex:i].ID) {
+                [arr removeObjectAtIndex:i];
+                [_tableView reloadData];
+                break;
             }
-            else if ([t.priority isEqualToString:@"Mid"]) {
-                [self UpdateInTable:_MedTodo :t];
-            }
-            else {
-                [self UpdateInTable:_LowTodo :t];
-            }
-            
         }
-        else {
-            [self UpdateInTable:_todoArray :t];
+    }
+    else {
+        // Update on Table View.
+        for (int i=0;i<([arr count]); i++) {
+            if (t.ID == [arr objectAtIndex:i].ID) {
+                [arr removeObjectAtIndex:i];
+                break;
+            }
         }
+        [arr addObject: t];
+        [_tableView reloadData];
     }
 }
 
 -(void) UpdateInTable:(NSMutableArray<ToDoList *> *) arr : (ToDoList *) t {
     
-    for (int i=0;i<([arr count]); i++) {
-        if (t.ID == [arr objectAtIndex:i].ID) {
-            [arr removeObjectAtIndex:i];
-            [_tableView reloadData];
-            break;
+    printf("%ld\n",(long)_rowNumber);
+    
+    /*
+        1) Update Data in Big Array & save to NSUserDefaults.
+        2) Update Data on TableView.
+        3) if state changed to complete delete from tableView.
+     */
+    
+    if ([t.state isEqualToString:@"Completed"]) {
+        printf("Done\n");
+        for (int i=0;i<[_arr count];i++) {
+            if (t.ID == [_arr objectAtIndex:i].ID) {
+                [_arr removeObjectAtIndex:i];
+                [_arr addObject:t];
+                [t saveCustomObject:_arr key:@"Notes"];
+            }
+        }
+        
+        [arr removeObjectAtIndex:_rowNumber];
+        [_tableView reloadData];
+    }
+    else {
+        printf("FDone\n");
+        
+        [arr removeObjectAtIndex:_rowNumber];
+        [arr addObject: t];
+        [_tableView reloadData];
+        
+        for (int i=0;i<[_arr count];i++) {
+            if (t.ID == [_arr objectAtIndex:i].ID) {
+                [_arr removeObjectAtIndex:i];
+                [_arr addObject:t];
+                [t saveCustomObject:_arr key:@"Notes"];
+                break;
+            }
         }
     }
-    [arr addObject: t];
-    [_tableView reloadData];
 }
 
 
@@ -293,15 +349,46 @@
             printf("Deleted\n");
             
             if (self->_isSorted == NO) {
+                
+                // Deleted in NSUserDefault.
+                for (int i=0;i<(self->_arr.count);i++) {
+                    if ([[self->_arr objectAtIndex:i].ID isEqualToString: [self->_todoArray objectAtIndex:indexPath.row].ID]) {
+                        
+                        [self->_arr removeObjectAtIndex:i];
+                        ToDoList *t = [ToDoList new];
+                        [t saveCustomObject:self->_arr key:@"Notes"];
+                        break;
+                        
+                    }
+                }
+                
+                // Deleted in tableView.
                 [self->_todoArray removeObjectAtIndex:indexPath.row];
                 [self->_tableView reloadData];
             }
             else {
                 self->_id = [NSString new];
                 if (indexPath.section == 0) {
+                    
+                    // Make Ready to start.
                     self->_id = [self->_HighTodo objectAtIndex:indexPath.row].ID;
+                    
+                    // Delete From Sorted TableView.
                     [self->_HighTodo removeObjectAtIndex:indexPath.row];
                     
+                    // Deleted in NSUserDefault.
+                    for (int i=0;i<(self->_arr.count);i++) {
+                        if ([[self->_arr objectAtIndex:i].ID isEqualToString: self->_id]) {
+                            
+                            [self->_arr removeObjectAtIndex:i];
+                            ToDoList *t = [ToDoList new];
+                            [t saveCustomObject:self->_arr key:@"Notes"];
+                            break;
+                            
+                        }
+                    }
+                    
+                    // Delete From UnSorted Array.
                     for (int i=0; i<self->_todoArray.count; i++) {
                         if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
                             [self->_todoArray removeObjectAtIndex:i];
@@ -311,9 +398,26 @@
                     [self->_tableView reloadData];
                 }
                 else if (indexPath.section == 1) {
+                    
+                    // Make Ready to start.
                     self->_id = [self->_MedTodo objectAtIndex:indexPath.row].ID;
+                    
+                    // Delete From Sorted TableView.
                     [self->_MedTodo removeObjectAtIndex:indexPath.row];
                     
+                    // Deleted in NSUserDefault.
+                    for (int i=0;i<(self->_arr.count);i++) {
+                        if ([[self->_arr objectAtIndex:i].ID isEqualToString: self->_id]) {
+                            
+                            [self->_arr removeObjectAtIndex:i];
+                            ToDoList *t = [ToDoList new];
+                            [t saveCustomObject:self->_arr key:@"Notes"];
+                            break;
+                            
+                        }
+                    }
+                    
+                    // Delete From UnSorted Array.
                     for (int i=0; i<self->_todoArray.count; i++) {
                         if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
                             [self->_todoArray removeObjectAtIndex:i];
@@ -323,9 +427,26 @@
                     [self->_tableView reloadData];
                 }
                 else {
+                    
+                    // Make Ready to start.
                     self->_id = [self->_LowTodo objectAtIndex:indexPath.row].ID;
+                    
+                    // Delete From Sorted TableView.
                     [self->_LowTodo removeObjectAtIndex:indexPath.row];
                     
+                    // Deleted in NSUserDefault.
+                    for (int i=0;i<(self->_arr.count);i++) {
+                        if ([[self->_arr objectAtIndex:i].ID isEqualToString: self->_id]) {
+                            
+                            [self->_arr removeObjectAtIndex:i];
+                            ToDoList *t = [ToDoList new];
+                            [t saveCustomObject:self->_arr key:@"Notes"];
+                            break;
+                            
+                        }
+                    }
+                    
+                    // Delete From UnSorted Array.
                     for (int i=0; i<self->_todoArray.count; i++) {
                         if ([[self->_todoArray objectAtIndex:i].ID isEqualToString:self->_id]) {
                             [self->_todoArray removeObjectAtIndex:i];
@@ -373,6 +494,7 @@
         }
         else {
             next.onece = [_todoArray objectAtIndex:indexPath.row];
+            _rowNumber = indexPath.row;
         }
         
     }
