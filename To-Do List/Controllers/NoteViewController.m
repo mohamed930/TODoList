@@ -8,6 +8,7 @@
 #import "NoteViewController.h"
 #import <SCAlertPicker.h>
 #import "ToDoList.h"
+#import <UserNotifications/UserNotifications.h>
 
 @interface NoteViewController ()
 
@@ -128,7 +129,10 @@
     NSString *result = [formatter stringFromDate: date];
     
     list.DateCreation = result;
+    list.ident = [id1 UUIDString];
+    
     [_delegate SendNewNote: list:NO];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
     
 }
@@ -160,6 +164,7 @@
             list.state = self->_PickState;
             list.desc = self->_NoteDetails.text;
             list.DateCreation = self->_onece.DateCreation;
+            list.ident = self->_onece.ident;
             
             [self->_delegate SendNewNote:list :YES];
             [self dismissViewControllerAnimated:YES completion:nil];

@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ToDoList : NSObject <NSCoding>
 
-@property NSString  *ID ,*name, *desc , *priority , *DeadLineData , *DateCreation , *state;
+@property NSString  *ID ,*name, *desc , *priority , *DeadLineData , *DateCreation , *state ,*ident;
 
 - (void)saveCustomObject:(NSMutableArray<ToDoList *> *)object key:(NSString *)key;
 

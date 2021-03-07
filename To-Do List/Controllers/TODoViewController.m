@@ -139,6 +139,7 @@
                 ToDoList *t1 = [ToDoList new];
                 [t1 saveCustomObject:_todoArray key:@"Notes"];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
+                [self SendNotification:t.name :t.desc :t.DeadLineData :t.ident];
             }
             else if ([t.priority isEqualToString:@"Mid"]) {
                 [_MedTodo addObject: t];
@@ -147,6 +148,7 @@
                 ToDoList *t1 = [ToDoList new];
                 [t1 saveCustomObject:_todoArray key:@"Notes"];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
+                [self SendNotification:t.name :t.desc :t.DeadLineData :t.ident];
             }
             else {
                 [_LowTodo addObject: t];
@@ -155,6 +157,7 @@
                 ToDoList *t1 = [ToDoList new];
                 [t1 saveCustomObject:_todoArray key:@"Notes"];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
+                [self SendNotification:t.name :t.desc :t.DeadLineData :t.ident];
             }
             
         }
@@ -166,6 +169,8 @@
             [t1 saveCustomObject:_todoArray key:@"Notes"];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
+        
+            [self SendNotification: t.name : t.desc :t.DeadLineData: t.ident];
         }
         
     }
@@ -177,24 +182,56 @@
                 [self UpdateInTable:_HighTodo :t];
                 [self UpdateInTable:_todoArray :t];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
+                [self SendNotification:t.name :t.desc :t.DeadLineData :t.ident];
             }
             else if ([t.priority isEqualToString:@"Mid"]) {
                 [self UpdateInTable:_MedTodo :t];
                 [self UpdateInTable:_todoArray :t];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
+                [self SendNotification:t.name :t.desc :t.DeadLineData :t.ident];
             }
             else {
                 [self UpdateInTable:_LowTodo :t];
                 [self UpdateInTable:_todoArray :t];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
+                [self SendNotification:t.name :t.desc :t.DeadLineData :t.ident];
             }
             
         }
         else {
             [self UpdateInTable:_todoArray :t];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Changed" object:self];
+        
+            
+            [self SendNotification:t.name :t.desc :t.DeadLineData :t.ident];
         }
     }
+}
+
+-(void) SendNotification: (NSString *) Title : (NSString *) Describe : (NSString *) Deadline : (NSString *) ident {
+    
+    NSDateFormatter * d1 = [[NSDateFormatter alloc] init];
+    d1.dateFormat = @"dd/MM/yyy hh:mm a";
+    NSDate * date1 = [d1 dateFromString: Deadline];
+    
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear |NSCalendarUnitHour | NSCalendarUnitMinute fromDate: date1];
+    
+    UNUserNotificationCenter *center = UNUserNotificationCenter.currentNotificationCenter;
+    UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+    content.title = Title;
+    content.body  = Describe;
+    content.sound = UNNotificationSound.defaultSound;
+    
+    UNCalendarNotificationTrigger *trigger = [UNCalendarNotificationTrigger triggerWithDateMatchingComponents:components repeats:NO];
+    
+    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier: ident content:content trigger:trigger];
+    
+    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"%@",error.localizedDescription);
+        }
+    }];
+    
 }
 
 -(void) UpdateInTable:(NSMutableArray<ToDoList *> *) arr : (ToDoList *) t {
